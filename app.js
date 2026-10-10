@@ -260,6 +260,7 @@ $("loanForm").addEventListener("submit", async (event) => {
   const msg = $("formMessage");
 
   showMessage(msg, "", "");
+  $("supportApplicationWrap").hidden = true;
   if (!fullName || !phone) {
     return showMessage(msg, "Please enter your name and phone number.", "error");
   }
@@ -303,6 +304,7 @@ $("loanForm").addEventListener("submit", async (event) => {
   showOverlay("success", "Application submitted",
     "Thank you. Your application is now under review by our team. " +
     "Approval is not guaranteed. You can follow its status under \"My applications\".");
+  $("supportApplicationWrap").hidden = false;
   $("loanForm").reset();
   loadApplications();
 });

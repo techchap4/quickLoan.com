@@ -140,6 +140,12 @@ input[type="range"] { width: 100%; accent-color: var(--brand); }
 .btn-small { padding: .35rem .8rem; font-size: .85rem; margin-top: 0; }
 .btn-row { display: flex; gap: .7rem; flex-wrap: wrap; }
 
+/* Optional support button shown only after an application is submitted successfully */
+.support-application { margin-top: .35rem; }
+.support-btn { display: block; width: 100%; text-align: center; background: #2563eb; border-color: #2563eb; }
+.support-btn:hover { background: #1d4ed8; border-color: #1d4ed8; }
+.support-note { margin: .45rem 0 0; }
+
 /* Text-style button used for "Forgot your password?" etc. */
 .link-row { margin: .9rem 0 0; }
 .link-btn {
