@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QuickLoan - Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">QuickLoan</a>
+      <nav class="nav">
+        <a href="index.html">Back to site</a>
+      </nav>
+      <div class="user-box" id="userBox" hidden>
+        <span id="userEmail"></span>
+        <button class="btn btn-small btn-outline" id="logoutBtn" type="button">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section section-alt admin-section">
+      <div class="container">
+        <h1 class="admin-title">Admin dashboard</h1>
+
+        <!-- Not logged in -->
+        <div id="loggedOutView">
+          <div class="card narrow">
+            <h2>Admin log in</h2>
+            <label for="authEmail">Email</label>
+            <input type="email" id="authEmail" autocomplete="email">
+            <label for="authPassword">Password</label>
+            <input type="password" id="authPassword" autocomplete="current-password">
+            <button class="btn" id="loginBtn" type="button">Log in</button>
+            <p class="link-row"><button class="link-btn" id="forgotBtn" type="button">Forgot your password?</button></p>
+            <p class="message" id="authMessage" role="status"></p>
+          </div>
+        </div>
+
+        <!-- Logged in but not an admin -->
+        <div id="deniedView" hidden>
+          <div class="card narrow">
+            <h2>Access denied</h2>
+            <p>This account is not an administrator. Log out and sign in with your admin account.</p>
+          </div>
+        </div>
+
+        <!-- Admin panel -->
+        <div id="adminView" hidden>
+
+          <div class="tabs" role="tablist">
+            <button type="button" class="tab active" data-tab="applications" role="tab">Loan applications</button>
+            <button type="button" class="tab" data-tab="messages" role="tab">Messages <span class="tab-count" id="unreadCount" hidden>0</span></button>
+          </div>
+
+          <p class="message" id="adminMessage" role="status"></p>
+
+          <!-- ===== TAB 1: APPLICATIONS ===== -->
+          <div id="tabApplications">
+            <div class="stats">
+              <div class="stat"><span class="stat-num" id="countAll">0</span><span>Total</span></div>
+              <div class="stat pending"><span class="stat-num" id="countPending">0</span><span>Pending</span></div>
+              <div class="stat approved"><span class="stat-num" id="countApproved">0</span><span>Approved</span></div>
+              <div class="stat rejected"><span class="stat-num" id="countRejected">0</span><span>Rejected</span></div>
+            </div>
+
+            <div class="toolbar">
+              <div class="filters" id="filters">
+                <button type="button" class="chip active" data-filter="all">All</button>
+                <button type="button" class="chip" data-filter="pending">Pending</button>
+                <button type="button" class="chip" data-filter="approved">Approved</button>
+                <button type="button" class="chip" data-filter="rejected">Rejected</button>
+              </div>
+              <input type="search" id="searchBox" placeholder="Search name or phone..." class="search">
+              <button type="button" class="btn btn-small btn-outline" id="refreshBtn">Refresh</button>
+            </div>
+
+            <div class="card table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Applicant</th>
+                    <th>Phone</th>
+                    <th>Amount</th>
+                    <th>Months</th>
+                    <th>Monthly</th>
+                    <th>Purpose</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="adminBody"></tbody>
+              </table>
+              <p class="muted" id="adminEmpty" hidden>No applications to show.</p>
+            </div>
+          </div>
+
+          <!-- ===== TAB 2: MESSAGES ===== -->
+          <div id="tabMessages" hidden>
+            <div class="toolbar">
+              <div class="filters" id="msgFilters">
+                <button type="button" class="chip active" data-mfilter="all">All</button>
+                <button type="button" class="chip" data-mfilter="unread">Unread</button>
+                <button type="button" class="chip" data-mfilter="read">Read</button>
+              </div>
+              <button type="button" class="btn btn-small btn-outline" id="refreshMsgBtn">Refresh</button>
+            </div>
+
+            <div class="card table-wrap">
+              <table class="msg-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>From</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="msgBody"></tbody>
+              </table>
+              <p class="muted" id="msgEmpty" hidden>No messages to show.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

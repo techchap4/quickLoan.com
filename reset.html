@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QuickLoan - Reset password</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">QuickLoan</a>
+      <nav class="nav">
+        <a href="index.html">Back to site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section section-alt" style="min-height:70vh">
+      <div class="container">
+        <h1 style="font-size:1.8rem">Choose a new password</h1>
+
+        <!-- Checking the link -->
+        <div class="card narrow" id="checkingView">
+          <p>Checking your reset link...</p>
+        </div>
+
+        <!-- Link is valid: show the form -->
+        <div class="card narrow" id="resetView" hidden>
+          <label for="newPassword">New password (at least 8 characters)</label>
+          <input type="password" id="newPassword" autocomplete="new-password">
+
+          <label for="confirmPassword">Confirm new password</label>
+          <input type="password" id="confirmPassword" autocomplete="new-password">
+
+          <button class="btn" id="resetBtn" type="button">Save new password</button>
+          <p class="message" id="resetMessage" role="status"></p>
+        </div>
+
+        <!-- Link is broken or expired -->
+        <div class="card narrow" id="invalidView" hidden>
+          <h2>This link does not work</h2>
+          <p>Reset links expire after a short time and can only be used once. Go back and request a new one.</p>
+          <a class="btn" href="index.html#account">Request a new link</a>
+        </div>
+
+        <!-- Done -->
+        <div class="card narrow" id="doneView" hidden>
+          <h2>Password changed</h2>
+          <p>Your password was updated. Taking you back to log in...</p>
+          <a class="btn" href="index.html#account">Log in now</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script>
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const $ = (id) => document.getElementById(id);
+    const MIN_PASSWORD = 8;
+
+    function show(view) {
+      ["checkingView", "resetView", "invalidView", "doneView"].forEach((v) => {
+        $(v).hidden = v !== view;
+      });
+    }
+
+    let recoveryReady = false;
+
+    // Supabase fires PASSWORD_RECOVERY when the email link is valid.
+    db.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        recoveryReady = true;
+        show("resetView");
+        $("newPassword").focus();
+      }
+    });
+
+    // If nothing happens after a few seconds, the link is invalid/expired/missing.
+    setTimeout(() => {
+      if (!recoveryReady) show("invalidView");
+    }, 4000);
+
+    $("resetBtn").addEventListener("click", async () => {
+      const pw = $("newPassword").value;
+      const pw2 = $("confirmPassword").value;
+      const msg = $("resetMessage");
+
+      function say(text, type) { msg.textContent = text; msg.className = "message " + (type || ""); }
+
+      if (pw.length < MIN_PASSWORD) return say("Your password must be at least " + MIN_PASSWORD + " characters.", "error");
+      if (pw !== pw2) return say("The two passwords do not match.", "error");
+
+      $("resetBtn").disabled = true;
+      say("Saving...", "");
+      const { error } = await db.auth.updateUser({ password: pw });
+
+      if (error) {
+        $("resetBtn").disabled = false;
+        return say(error.message, "error");
+      }
+
+      // Log out so they sign in fresh with the new password.
+      await db.auth.signOut();
+      show("doneView");
+      setTimeout(() => { window.location.href = "index.html#account"; }, 2500);
+    });
+
+    [$("newPassword"), $("confirmPassword")].forEach((el) =>
+      el.addEventListener("keydown", (e) => { if (e.key === "Enter") $("resetBtn").click(); })
+    );
+  </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+/* Extra styles for admin.html (loads after style.css) */
+
+.admin-section { min-height: 70vh; }
+.admin-title { font-size: 1.8rem; margin-bottom: 1.2rem; }
+
+/* ===== Tabs ===== */
+.tabs {
+  display: flex;
+  gap: .4rem;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: .8rem;
+}
+.tab {
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  padding: .6rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+}
+.tab:hover { color: var(--brand); }
+.tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+.tab-count {
+  display: inline-block;
+  min-width: 1.4rem;
+  padding: 0 .4rem;
+  margin-left: .3rem;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #fff;
+  font-size: .78rem;
+  text-align: center;
+}
+
+/* ===== Summary boxes ===== */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+.stat {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  color: var(--muted);
+  font-size: .9rem;
+}
+.stat-num { font-size: 1.9rem; font-weight: 800; color: var(--ink); line-height: 1.1; }
+.stat.pending .stat-num { color: #92400e; }
+.stat.approved .stat-num { color: var(--ok); }
+.stat.rejected .stat-num { color: var(--danger); }
+
+/* ===== Toolbar: filters, search, refresh ===== */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .8rem;
+  margin-bottom: .8rem;
+}
+.filters { display: flex; gap: .4rem; flex-wrap: wrap; }
+.chip {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: .35rem .9rem;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.chip:hover { border-color: var(--brand); }
+.chip.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+
+.search {
+  flex: 1;
+  min-width: 180px;
+  padding: .55rem .8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: .95rem;
+  font-family: inherit;
+}
+.search:focus { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+/* ===== Table extras ===== */
+.admin-section table { min-width: 860px; }
+.admin-section .msg-table { min-width: 760px; }
+.actions { white-space: nowrap; }
+.actions .btn { margin-right: .3rem; }
+
+.btn-approve { background: var(--ok); border-color: var(--ok); }
+.btn-approve:hover { background: #05603a; border-color: #05603a; }
+.btn-reject { background: var(--danger); border-color: var(--danger); }
+.btn-reject:hover { background: #912018; border-color: #912018; }
+
+/* ===== Messages ===== */
+.msg-cell { white-space: pre-wrap; word-break: break-word; max-width: 360px; }
+.msg-unread td { background: #f0fdfa; font-weight: 600; }
+a.btn { text-decoration: none; }
+
+@media (max-width: 680px) {
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
